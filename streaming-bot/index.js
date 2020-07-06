@@ -99,39 +99,7 @@ server.on('upgrade', (req, socket, head) => {
     });
 });
 
-server.post('/directline/token', (req, res) => {
-    console.log('/directline/token');
-    const options = {
-        method: 'POST',
-        uri: 'https://ash-streaming-js.azurewebsites.net/.bot/v3/directline/tokens/generate',
-        headers: {
-            'Authorization': `Bearer ${process.env.DIRECT_LINE_SECRET}`,
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-        },
-        body: JSON.stringify({
-            user: { id: 'dl_userId123' },
-            trustedOrigins: [
-              'https://webchat-mockbot2.azurewebsites.net/',
-              'http://localhost:3000',
-              'https://ash-streaming-js.azurewebsites.net/',
-              'http://localhost',
-              'http://localhost:3978'
-            ]
-        })
-    }
-
-    request.post(options, (error, response, body) => {
-        if (!error && response.statusCode < 300) { 
-            res.send({ 
-                token: body.token 
-            }); 
-        } else { 
-        res.status(500).send('Call to retrieve token from DirectLine failed'); 
-        } 
-    });
-});
-
+// Token Server, to ensure DL secret is not visible to client
 server.post('/api/token/directlinease', async (req, res) => {
     console.log('/api/token/directlinease');
     const { DIRECT_LINE_SECRET, WEBSITE_HOSTNAME } = process.env;
